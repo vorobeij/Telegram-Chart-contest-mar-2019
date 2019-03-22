@@ -1,0 +1,42 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+}
+
+sourceCompatibility = "7"
+targetCompatibility = "7"
+buildscript {
+    ext.kotlin_version = '1.3.21'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+repositories {
+    mavenCentral()
+    jcenter()
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation "com.github.shyiko.ktlint:ktlint-core:0.30.0"
+    testImplementation "com.github.shyiko.ktlint:ktlint-core:0.30.0"
+    testImplementation "com.github.shyiko.ktlint:ktlint-test:0.30.0"
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.assertj:assertj-core:3.10.0"
+    testImplementation "org.amshove.kluent:kluent:1.36"
+}

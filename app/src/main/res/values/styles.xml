@@ -1,0 +1,37 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    <style name="AppTheme.Dark">
+        <item name="colorPrimaryDark">#1a242e</item>
+        <item name="colorWindow">#151e27</item>
+        <item name="colorBackground">#1d2733</item>
+        <item name="colorToolbar">#212d3b</item>
+        <item name="colorPointer">#202b38</item>
+        <item name="colorGrid">#111924</item>
+        <item name="colorOverviewWindow">#7E2B4256</item>
+        <item name="colorOverviewTint">#8019232E</item>
+        <item name="colorChartText">#506372</item>
+        <item name="colorText">#e5eff5</item>
+        <item name="colorChartTitle">#7bc4fb</item>
+    </style>
+
+    <style name="AppTheme.Light">
+        <item name="colorPrimaryDark">#426382</item>
+        <item name="colorWindow">#f0f0f0</item>
+        <item name="colorBackground">#ffffff</item>
+        <item name="colorToolbar">#517da2</item>
+        <item name="colorPointer">#ffffff</item>
+        <item name="colorGrid">#e7e8e9</item>
+        <item name="colorOverviewWindow">#75DBE7F0</item>
+        <item name="colorOverviewTint">#7CF5F8F9</item>
+        <item name="colorChartText">#9ba6ae</item>
+        <item name="colorText">#222222</item>
+        <item name="colorChartTitle">#3c98d5</item>
+    </style>
+
+</resources>

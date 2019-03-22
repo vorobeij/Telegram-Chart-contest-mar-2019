@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorBackground" format="color" />
+    <attr name="colorPointer" format="color" />
+    <attr name="colorGrid" format="color" />
+    <attr name="colorOverviewWindow" format="color" />
+    <attr name="colorOverviewTint" format="color" />
+    <attr name="colorChartText" format="color" />
+    <attr name="colorText" format="color" />
+    <attr name="colorTextToolbar" format="color" />
+    <attr name="colorChartTitle" format="color" />
+</resources>
