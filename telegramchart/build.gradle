@@ -90,3 +90,5 @@ dependencies {
 repositories {
     mavenCentral()
 }
+
+preBuild.dependsOn ktlintFormat

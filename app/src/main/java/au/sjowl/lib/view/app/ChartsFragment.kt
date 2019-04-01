@@ -5,6 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import au.sjowl.apps.telegram.chart.R
 import au.sjowl.lib.view.app.charts.ChartAdapter
+import au.sjowl.lib.view.app.charts.Themes
 import au.sjowl.lib.view.telegramchart.getColorFromAttr
 import au.sjowl.lib.view.utils.ResourcesUtils
 import kotlinx.android.synthetic.main.fr_charts.*

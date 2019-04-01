@@ -1,4 +1,4 @@
-package au.sjowl.lib.view.app
+package au.sjowl.lib.view.app.charts
 
 import au.sjowl.apps.telegram.chart.R
 
