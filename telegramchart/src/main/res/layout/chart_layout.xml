@@ -38,10 +38,11 @@
         android:layout_marginStart="@dimen/margin_default"
         android:layout_marginEnd="@dimen/margin_default" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <LinearLayout
+        android:id="@+id/chartNames"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:overScrollMode="never"
-        tools:listitem="@layout/rv_item_chart_title" />
+        android:dividerPadding="@dimen/margin_default"
+        android:orientation="vertical" />
+
 </LinearLayout>

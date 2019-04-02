@@ -2,16 +2,18 @@ package au.sjowl.lib.view.telegramchart.overview
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import au.sjowl.lib.view.telegramchart.ThemedView
 import au.sjowl.lib.view.telegramchart.data.ChartData
 import au.sjowl.lib.view.telegramchart.params.ChartColors
 import au.sjowl.lib.view.telegramchart.params.ChartPaints
 import org.jetbrains.anko.dip
 
-class ChartOverviewView : View {
+class ChartOverviewView : View, ThemedView {
 
     var chartData: ChartData = ChartData()
         set(value) {
@@ -35,6 +37,12 @@ class ChartOverviewView : View {
 
     private var paints = ChartPaints(context, ChartColors(context))
 
+    private var chartsBmp: Bitmap? = null
+
+    private val chartsCanvas = Canvas()
+
+    private var chartsChanged = true
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         rectangles.reset(0f, 0f, measuredWidth * 1f, measuredHeight * 1f)
@@ -43,10 +51,21 @@ class ChartOverviewView : View {
         layoutHelper.w = measuredWidth.toFloat()
 
         charts.forEach { it.updatePoints() }
+        createChartsBitmap()
+        invalidateChartsBitmap()
     }
 
     override fun onDraw(canvas: Canvas) {
-        charts.forEach { it.draw(canvas) }
+        if (chartsChanged) {
+            if (measuredHeight > 0 && measuredWidth > 0) {
+                charts.forEach { it.draw(canvas) }
+            }
+            chartsChanged = false
+        } else {
+            chartsBmp?.let {
+                canvas.drawBitmap(chartsBmp, 0f, 0f, null)
+            }
+        }
         drawBackground(canvas)
         drawWindow(canvas)
     }
@@ -121,12 +140,18 @@ class ChartOverviewView : View {
         return true
     }
 
+    override fun updateTheme(colors: ChartColors) {
+        paints = ChartPaints(context, colors)
+        invalidate()
+    }
+
     fun updateStartPoints() {
         charts.forEach { it.updateStartPoints() }
     }
 
     fun onAnimateValues(v: Float) {
         charts.forEach { it.onAnimateValues(v) }
+        chartsChanged = true
         invalidate()
     }
 
@@ -135,9 +160,19 @@ class ChartOverviewView : View {
         charts.forEach { it.updateFinishState() }
     }
 
-    fun updateTheme() {
-        paints = ChartPaints(context, ChartColors(context))
-        invalidate()
+    private fun createChartsBitmap() {
+        if (measuredHeight > 0 && measuredWidth > 0) {
+            chartsBmp?.recycle()
+            chartsBmp = Bitmap.createBitmap(measuredWidth, measuredHeight, Bitmap.Config.ARGB_4444)
+            chartsCanvas.setBitmap(chartsBmp)
+        }
+    }
+
+    private fun invalidateChartsBitmap() {
+        if (measuredHeight > 0 && measuredWidth > 0) {
+            println("redraw charts")
+            charts.forEach { it.draw(chartsCanvas) }
+        }
     }
 
     private fun setChartsRange() {

@@ -7,12 +7,13 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateInterpolator
+import au.sjowl.lib.view.telegramchart.ThemedView
 import au.sjowl.lib.view.telegramchart.data.ChartData
 import au.sjowl.lib.view.telegramchart.params.ChartColors
 import au.sjowl.lib.view.telegramchart.params.ChartPaints
 import java.util.LinkedList
 
-class AxisTimeView : View {
+class AxisTimeView : View, ThemedView {
 
     var chartData: ChartData = ChartData()
 
@@ -76,8 +77,9 @@ class AxisTimeView : View {
         super.onDetachedFromWindow()
     }
 
-    fun updateTheme() {
-        paints = ChartPaints(context, ChartColors(context))
+    override fun updateTheme(colors: ChartColors) {
+        paints = ChartPaints(context, colors)
+        invalidate()
     }
 
     fun onTimeIntervalChanged() {
@@ -92,7 +94,6 @@ class AxisTimeView : View {
     }
 
     private fun onScale() {
-//        val w = if (measuredWidth > 0) measuredWidth else 100
         val t0 = measuredWidth / halfText
 
         val start: Long = chartData.timeInterval / t0 + chartData.timeStart

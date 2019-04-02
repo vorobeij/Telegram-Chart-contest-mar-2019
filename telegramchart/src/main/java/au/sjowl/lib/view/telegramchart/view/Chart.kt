@@ -55,6 +55,7 @@ class Chart(
         for (i in 2 * timeStart..(2 * timeEnd + 1)) {
             drawingPoints[i] = points[i]
         }
+        updatePathFromPoints()
     }
 
     fun updateStartPoints() {
@@ -80,11 +81,11 @@ class Chart(
             drawingPoints[i] = points[i]
             drawingPoints[i + 1] = points[i + 1] + (pointsFrom[i + 1] - points[i + 1]) * v
         }
+        updatePathFromPoints()
     }
 
     fun draw(canvas: Canvas) {
         if (lineData.enabled || enabled) {
-            updatePathFromPoints()
             val paint = paints.paintChartLine
             paint.color = lineData.color
             paint.alpha = (alpha * 255).toInt()

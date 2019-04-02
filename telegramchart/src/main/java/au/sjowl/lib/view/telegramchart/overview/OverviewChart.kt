@@ -51,6 +51,7 @@ class OverviewChart(
             points[j + 1] = mh - kY * (column[i] - min)
         }
         points.copyInto(drawingPoints)
+        drawingPoints.copyInto(drawingPointsOdd, 0, 2)
     }
 
     fun updateStartPoints() {
@@ -74,21 +75,17 @@ class OverviewChart(
             drawingPoints[i] = points[i]
             drawingPoints[i + 1] = points[i + 1] + (pointsFrom[i + 1] - points[i + 1]) * animValue
         }
+        drawingPoints.copyInto(drawingPointsOdd, 0, 2)
     }
 
     fun draw(canvas: Canvas) {
         if (lineData.enabled || enabled) {
-            updatePathFromPoints()
             val paint = paints.paintOverviewLine
             paint.color = lineData.color
             paint.alpha = (alpha * 255).toInt()
             canvas.drawLines(drawingPoints, paint)
             canvas.drawLines(drawingPointsOdd, paint)
         }
-    }
-
-    private fun updatePathFromPoints() {
-        drawingPoints.copyInto(drawingPointsOdd, 0, 2)
     }
 
     private inline fun setVals() {

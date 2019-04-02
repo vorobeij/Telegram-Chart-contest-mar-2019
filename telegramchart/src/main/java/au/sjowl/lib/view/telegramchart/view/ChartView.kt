@@ -6,12 +6,13 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import au.sjowl.lib.view.telegramchart.ThemedView
 import au.sjowl.lib.view.telegramchart.data.ChartData
 import au.sjowl.lib.view.telegramchart.params.ChartColors
 import au.sjowl.lib.view.telegramchart.params.ChartLayoutParams
 import au.sjowl.lib.view.telegramchart.params.ChartPaints
 
-class ChartView : View {
+class ChartView : View, ThemedView {
 
     var chartData: ChartData = ChartData()
         set(value) {
@@ -74,18 +75,18 @@ class ChartView : View {
         return true
     }
 
+    override fun updateTheme(colors: ChartColors) {
+        paints = ChartPaints(context, colors)
+        axisY.paints = paints
+        pointer.paints = paints
+        charts.forEach { it.paints = paints }
+        invalidate()
+    }
+
     fun onTimeIntervalChanged() {
         adjustValueRange()
         axisY.onAnimateValues(0f)
         charts.forEach { it.updatePoints() }
-        invalidate()
-    }
-
-    fun updateTheme() {
-        paints = ChartPaints(context, ChartColors(context))
-        axisY.paints = paints
-        pointer.paints = paints
-        charts.forEach { it.paints = paints }
         invalidate()
     }
 
@@ -129,7 +130,10 @@ class ChartView : View {
         }
     }
 
-    constructor(context: Context) : super(context)
+    constructor(context: Context) : super(context) {
+        if (!isInEditMode) setLayerType(View.LAYER_TYPE_HARDWARE, null)
+    }
+
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 }
