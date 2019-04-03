@@ -47,13 +47,12 @@ class ChartView : View, ThemedView {
 
     override fun onDraw(canvas: Canvas) {
         axisY.drawGrid(canvas)
-        val activeCharts = charts
-        activeCharts.forEach { it.draw(canvas) }
+        charts.forEach { it.draw(canvas) }
         axisY.drawMarks(canvas)
         if (drawPointer) {
             paints.paintGrid.alpha = 255
             canvas.drawLine(chartData.pointerTimeX, layoutHelper.h, chartData.pointerTimeX, layoutHelper.paddingTop.toFloat(), paints.paintGrid)
-            activeCharts.forEach { it.drawPointer(canvas) }
+            charts.forEach { it.drawPointer(canvas) }
             pointer.draw(canvas)
         }
     }
@@ -130,10 +129,19 @@ class ChartView : View, ThemedView {
         }
     }
 
-    constructor(context: Context) : super(context) {
-        if (!isInEditMode) setLayerType(View.LAYER_TYPE_HARDWARE, null)
+    private fun init() {
+        if (!isInEditMode) setLayerType(LAYER_TYPE_HARDWARE, null)
     }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context) : super(context) {
+        init()
+    }
+
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        init()
+    }
+
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        init()
+    }
 }

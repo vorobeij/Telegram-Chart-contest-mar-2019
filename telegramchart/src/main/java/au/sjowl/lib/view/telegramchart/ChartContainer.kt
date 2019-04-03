@@ -23,11 +23,10 @@ class ChartContainer : LinearLayout {
             field = value
             value.columns.values.forEach { it.calculateExtremums() }
             titleTextView.text = value.title
-            onAnimate(floatValueAnimator) {
-                chartOverview.chartData = chartData
-                chartView.chartData = chartData
-                axisTime.chartData = chartData
-            }
+
+            chartOverview.chartData = chartData
+            chartView.chartData = chartData
+            axisTime.chartData = chartData
 
             chartNames.removeAllViews()
             var i = 0

@@ -3,6 +3,7 @@ package au.sjowl.lib.view.telegramchart.names
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import au.sjowl.lib.view.telegramchart.R
 import au.sjowl.lib.view.telegramchart.ThemedView
@@ -35,6 +36,9 @@ class ChartNameView : LinearLayout, ThemedView {
 
     constructor(context: Context) : super(context) {
         init()
+        if (!isInEditMode) {
+            setLayerType(View.LAYER_TYPE_HARDWARE, null)
+        }
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
