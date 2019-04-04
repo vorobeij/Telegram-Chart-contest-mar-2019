@@ -44,14 +44,8 @@ class Chart(
 
     private var animValue = 0f
 
-    fun updatePoints() {
-        setVals()
-        var j = 0
-        for (i in timeStart..timeEnd) {
-            j = i * 2
-            points[j] = x(i)
-            points[j + 1] = y(i)
-        }
+    fun setupPoints() {
+        calculatePoints()
         for (i in 2 * timeStart..(2 * timeEnd + 1)) {
             drawingPoints[i] = points[i]
         }
@@ -66,7 +60,7 @@ class Chart(
     }
 
     fun updateFinishState() {
-        updatePoints()
+        calculatePoints()
     }
 
     fun onAnimateValues(v: Float) {
@@ -108,12 +102,22 @@ class Chart(
         return x(chartData.pointerTimeIndex)
     }
 
+    private inline fun calculatePoints() {
+        setVals()
+        var j = 0
+        for (i in timeStart..timeEnd) {
+            j = i * 2
+            points[j] = x(i)
+            points[j + 1] = y(i)
+        }
+    }
+
     private fun updatePathFromPoints() {
         with(path) {
             reset()
             if (drawingPoints.size > 1) {
                 moveTo(drawingPoints[2 * timeStart], drawingPoints[2 * timeStart + 1])
-                for (i in (2 * timeStart + 2)..2 * timeEnd step 2) {
+                for (i in (2 * timeStart + 2) until 2 * timeEnd step 2) {
                     lineTo(drawingPoints[i], drawingPoints[i + 1])
                 }
             }

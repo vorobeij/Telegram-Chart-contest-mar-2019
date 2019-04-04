@@ -217,7 +217,7 @@ class AxisTimeView : View, ThemedView {
     }
 
     private fun addBorderPoints() {
-        if (scalablePoints.isEmpty()) {
+        if (scalablePoints.size <= 1) {
             onScaleEnd()
         }
         while (scalablePoints[0].x in 0f..1f) {

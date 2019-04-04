@@ -33,8 +33,6 @@ class AxisY(
 
     private val rect = Rect()
 
-    private val paddingRect = PaddingRect(chartLayoutParams.paddingTextBottom / 2)
-
     fun drawMarks(canvas: Canvas) {
         val x = chartLayoutParams.paddingTextBottom * 1f
 
@@ -44,8 +42,6 @@ class AxisY(
             val text = valueFormatter.format(pointsTo[i].value)
             paints.paintChartText.getTextBounds(text, 0, text.length, rect)
             val y = pointsTo[i].canvasValue - chartLayoutParams.paddingTextBottom
-            val r = x / 2
-            canvas.drawRoundRect(paddingRect.rect(rect, x.toInt(), y.toInt()), r, r, paints.paintMarksBackground)
             canvas.drawText(text, x, y, paints.paintChartText)
         }
 

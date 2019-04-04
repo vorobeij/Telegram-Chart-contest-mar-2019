@@ -12,4 +12,6 @@ class OverviewLayoutParams(context: Context) {
     val paddingBottom = context.dip(4)
 
     val paddingTop = context.dip(4)
+
+    val dip = context.dip(1)
 }

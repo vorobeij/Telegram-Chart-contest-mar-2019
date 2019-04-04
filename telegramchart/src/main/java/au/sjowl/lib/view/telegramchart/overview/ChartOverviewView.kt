@@ -6,14 +6,14 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.View
+import au.sjowl.lib.view.telegramchart.BaseSurfaceView
 import au.sjowl.lib.view.telegramchart.ThemedView
 import au.sjowl.lib.view.telegramchart.data.ChartData
 import au.sjowl.lib.view.telegramchart.params.ChartColors
 import au.sjowl.lib.view.telegramchart.params.ChartPaints
 import org.jetbrains.anko.dip
 
-class ChartOverviewView : View, ThemedView {
+class ChartOverviewView : BaseSurfaceView, ThemedView {
 
     var chartData: ChartData = ChartData()
         set(value) {
@@ -41,8 +41,6 @@ class ChartOverviewView : View, ThemedView {
 
     private val chartsCanvas = Canvas()
 
-    private var chartsChanged = true
-
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         rectangles.reset(0f, 0f, measuredWidth * 1f, measuredHeight * 1f)
@@ -50,28 +48,12 @@ class ChartOverviewView : View, ThemedView {
         layoutHelper.h = measuredHeight.toFloat()
         layoutHelper.w = measuredWidth.toFloat()
 
-        charts.forEach { it.updatePoints() }
+        charts.forEach { it.setupPoints() }
         createChartsBitmap()
         invalidateChartsBitmap()
     }
 
-    override fun onDraw(canvas: Canvas) {
-        if (chartsChanged) {
-            if (measuredHeight > 0 && measuredWidth > 0) {
-                charts.forEach { it.draw(canvas) }
-            }
-            chartsChanged = false
-        } else {
-            chartsBmp?.let {
-                canvas.drawBitmap(chartsBmp, 0f, 0f, null)
-            }
-        }
-        drawBackground(canvas)
-        drawWindow(canvas)
-    }
-
     // todo scale with 2 pointers
-    // todo long method
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
@@ -140,6 +122,12 @@ class ChartOverviewView : View, ThemedView {
         return true
     }
 
+    override fun drawSurface(canvas: Canvas) {
+        drawCharts(canvas)
+        drawBackground(canvas)
+        drawWindow(canvas)
+    }
+
     override fun updateTheme(colors: ChartColors) {
         paints = ChartPaints(context, colors)
         invalidate()
@@ -151,13 +139,17 @@ class ChartOverviewView : View, ThemedView {
 
     fun onAnimateValues(v: Float) {
         charts.forEach { it.onAnimateValues(v) }
-        chartsChanged = true
         invalidate()
     }
 
     fun updateFinishState() {
         setChartsRange()
         charts.forEach { it.updateFinishState() }
+    }
+
+    private fun drawCharts(canvas: Canvas) {
+        canvas.drawColor(paints.colors.colorBackground)
+        charts.forEach { it.draw(canvas) }
     }
 
     private fun createChartsBitmap() {
@@ -223,5 +215,4 @@ class ChartOverviewView : View, ThemedView {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 }

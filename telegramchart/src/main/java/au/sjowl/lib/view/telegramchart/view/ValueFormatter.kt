@@ -37,13 +37,12 @@ class ValueFormatter {
     }
 
     fun format(value: Int): String {
-        return value.toString()
-//        return when (value) {
-//            in 0..999 -> value.toString()
-//            in 1000..999_999 -> "${removeTrailingZeroes("%.1f".format(value / 1000f).toFloat())}k"
-//            in 1_000_000..999_999_999 -> "${removeTrailingZeroes("%.1f".format(value / 1_000_000f).toFloat())}M"
-//            else -> value.toString()
-//        }
+        return when (value) {
+            in 0..999 -> value.toString()
+            in 1000..999_999 -> "${removeTrailingZeroes("%.1f".format(value / 1000f).toFloat())}k"
+            in 1_000_000..999_999_999 -> "${removeTrailingZeroes("%.1f".format(value / 1_000_000f).toFloat())}M"
+            else -> value.toString()
+        }
     }
 
     private inline fun removeTrailingZeroes(v: Float): String =

@@ -19,12 +19,15 @@ class ChartsFragment : BaseFragment() {
 
     override val layoutId: Int get() = R.layout.fr_charts
 
+    private val dataFile = "chart_data.json"
+
     private var theme: Int = Themes.LIGHT
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         getData().forEach { chartData ->
+            println("dots = ${4 * chartData.time.values.size}")
             chartData.initTimeWindow()
             val v = LayoutInflater.from(context).inflate(R.layout.rv_item_chart, chartsContainer, false)
             v.chartContainer.updateTheme()
@@ -47,7 +50,7 @@ class ChartsFragment : BaseFragment() {
     }
 
     private fun getData(): List<ChartData> {
-        val json = ResourcesUtils.getResourceAsString("chart_data.json")
+        val json = ResourcesUtils.getResourceAsString(dataFile)
         return ChartColumnJsonParser(json).parse()
     }
 }

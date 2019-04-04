@@ -20,13 +20,15 @@ class OverviewChart(
 
     protected var alpha = 1f
 
-    private val points = FloatArray(lineData.values.size * 2)
+    private var points = FloatArray(lineData.values.size * 2)
 
-    private val pointsFrom = FloatArray(lineData.values.size * 2)
+    private var pointsFrom = FloatArray(lineData.values.size * 2)
 
-    private val drawingPoints = FloatArray(lineData.values.size * 2)
+    private var drawingPoints = FloatArray(lineData.values.size * 2)
 
-    private val drawingPointsOdd = FloatArray(lineData.values.size * 2 - 2)
+    private val pointsPerDip = 0.5f
+
+    private var numberOfPointsToDraw = layoutHelper.w / layoutHelper.dip * pointsPerDip
 
     private var xmin = 0L
 
@@ -40,18 +42,25 @@ class OverviewChart(
 
     private var animValue = 0f
 
-    fun updatePoints() {
+    private var truncatedSize = 0
+
+    fun setupPoints() {
+        numberOfPointsToDraw = layoutHelper.w / layoutHelper.dip * pointsPerDip
+        points = FloatArray((numberOfPointsToDraw * 2).toInt())
+        pointsFrom = FloatArray((numberOfPointsToDraw * 2).toInt())
+        drawingPoints = FloatArray((numberOfPointsToDraw * 2).toInt())
+
         setVals()
         val t = chartData.time.values
         val column = lineData.values
         var j = 0
-        for (i in 0 until column.size) {
-            j = i * 2
-            points[j] = kX * (t[i] - xmin)
-            points[j + 1] = mh - kY * (column[i] - min)
+        val step = step()
+        for (i in 0 until t.size - step step step) {
+            points[j++] = kX * (t[i] - xmin)
+            points[j++] = mh - kY * (column[i] - min)
         }
+        truncatedSize = j
         points.copyInto(drawingPoints)
-        drawingPoints.copyInto(drawingPointsOdd, 0, 2)
     }
 
     fun updateStartPoints() {
@@ -60,7 +69,14 @@ class OverviewChart(
     }
 
     fun updateFinishState() {
-        updatePoints()
+        setVals()
+        val column = lineData.values
+        var j = 1
+        val step = step()
+        for (i in 0 until column.size - step step step) {
+            points[j] = mh - kY * (column[i] - min)
+            j += 2
+        }
     }
 
     fun onAnimateValues(v: Float) {
@@ -72,10 +88,8 @@ class OverviewChart(
         }
         animValue = v
         for (i in 0 until (points.size - 1) step 2) {
-            drawingPoints[i] = points[i]
             drawingPoints[i + 1] = points[i + 1] + (pointsFrom[i + 1] - points[i + 1]) * animValue
         }
-        drawingPoints.copyInto(drawingPointsOdd, 0, 2)
     }
 
     fun draw(canvas: Canvas) {
@@ -83,9 +97,13 @@ class OverviewChart(
             val paint = paints.paintOverviewLine
             paint.color = lineData.color
             paint.alpha = (alpha * 255).toInt()
-            canvas.drawLines(drawingPoints, paint)
-            canvas.drawLines(drawingPointsOdd, paint)
+            canvas.drawLines(drawingPoints, 0, truncatedSize, paint)
+            canvas.drawLines(drawingPoints, 2, truncatedSize - 2, paint)
         }
+    }
+
+    private fun step(): Int {
+        return Math.ceil((1f * chartData.time.values.size / numberOfPointsToDraw).toDouble()).toInt()
     }
 
     private inline fun setVals() {

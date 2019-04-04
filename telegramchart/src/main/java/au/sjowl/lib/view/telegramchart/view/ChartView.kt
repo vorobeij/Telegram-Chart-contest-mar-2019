@@ -5,14 +5,14 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.View
+import au.sjowl.lib.view.telegramchart.BaseSurfaceView
 import au.sjowl.lib.view.telegramchart.ThemedView
 import au.sjowl.lib.view.telegramchart.data.ChartData
 import au.sjowl.lib.view.telegramchart.params.ChartColors
 import au.sjowl.lib.view.telegramchart.params.ChartLayoutParams
 import au.sjowl.lib.view.telegramchart.params.ChartPaints
 
-class ChartView : View, ThemedView {
+class ChartView : BaseSurfaceView, ThemedView {
 
     var chartData: ChartData = ChartData()
         set(value) {
@@ -45,18 +45,6 @@ class ChartView : View, ThemedView {
         onTimeIntervalChanged()
     }
 
-    override fun onDraw(canvas: Canvas) {
-        axisY.drawGrid(canvas)
-        charts.forEach { it.draw(canvas) }
-        axisY.drawMarks(canvas)
-        if (drawPointer) {
-            paints.paintGrid.alpha = 255
-            canvas.drawLine(chartData.pointerTimeX, layoutHelper.h, chartData.pointerTimeX, layoutHelper.paddingTop.toFloat(), paints.paintGrid)
-            charts.forEach { it.drawPointer(canvas) }
-            pointer.draw(canvas)
-        }
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
@@ -74,6 +62,10 @@ class ChartView : View, ThemedView {
         return true
     }
 
+    override fun drawSurface(canvas: Canvas) {
+        drawSelf(canvas)
+    }
+
     override fun updateTheme(colors: ChartColors) {
         paints = ChartPaints(context, colors)
         axisY.paints = paints
@@ -85,7 +77,7 @@ class ChartView : View, ThemedView {
     fun onTimeIntervalChanged() {
         adjustValueRange()
         axisY.onAnimateValues(0f)
-        charts.forEach { it.updatePoints() }
+        charts.forEach { it.setupPoints() }
         invalidate()
     }
 
@@ -104,6 +96,19 @@ class ChartView : View, ThemedView {
         axisY.onAnimateValues(v)
         charts.forEach { it.onAnimateValues(v) }
         invalidate()
+    }
+
+    private fun drawSelf(canvas: Canvas) {
+        canvas.drawColor(paints.colors.colorBackground)
+        axisY.drawGrid(canvas)
+        axisY.drawMarks(canvas)
+        charts.forEach { it.draw(canvas) }
+        if (drawPointer) {
+            paints.paintGrid.alpha = 255
+            canvas.drawLine(chartData.pointerTimeX, layoutHelper.h, chartData.pointerTimeX, layoutHelper.paddingTop.toFloat(), paints.paintGrid)
+            charts.forEach { it.drawPointer(canvas) }
+            pointer.draw(canvas)
+        }
     }
 
     private fun adjustValueRange() {
@@ -130,7 +135,6 @@ class ChartView : View, ThemedView {
     }
 
     private fun init() {
-        if (!isInEditMode) setLayerType(LAYER_TYPE_HARDWARE, null)
     }
 
     constructor(context: Context) : super(context) {
@@ -138,10 +142,6 @@ class ChartView : View, ThemedView {
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         init()
     }
 }
