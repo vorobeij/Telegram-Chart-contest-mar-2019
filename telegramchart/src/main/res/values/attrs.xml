@@ -9,4 +9,6 @@
     <attr name="colorText" format="color" />
     <attr name="colorTextToolbar" format="color" />
     <attr name="colorChartTitle" format="color" />
+    <attr name="colorWindow" format="color" />
+    <attr name="colorToolbar" format="color" />
 </resources>

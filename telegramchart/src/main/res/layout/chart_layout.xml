@@ -15,14 +15,14 @@
         android:textSize="14sp"
         tools:text="Followers" />
 
-    <au.sjowl.lib.view.telegramchart.view.ChartView
+    <au.sjowl.lib.view.charts.telegram.view.ChartView
         android:id="@+id/chartView"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginStart="@dimen/margin_default"
         android:layout_marginEnd="@dimen/margin_default" />
 
-    <au.sjowl.lib.view.telegramchart.time.AxisTimeView
+    <au.sjowl.lib.view.charts.telegram.time.AxisTimeView
         android:id="@+id/axisTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp" />
 
-    <au.sjowl.lib.view.telegramchart.overview.ChartOverviewView
+    <au.sjowl.lib.view.charts.telegram.overview.ChartOverviewView
         android:id="@+id/chartOverview"
         android:layout_width="match_parent"
         android:layout_height="40dp"

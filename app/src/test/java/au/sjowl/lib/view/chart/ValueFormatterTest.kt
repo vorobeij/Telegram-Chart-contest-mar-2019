@@ -1,6 +1,6 @@
 package au.sjowl.lib.view.chart
 
-import au.sjowl.lib.view.telegramchart.view.ValueFormatter
+import au.sjowl.lib.view.charts.telegram.view.ValueFormatter
 import org.amshove.kluent.shouldBe
 import org.junit.Test
 import kotlin.test.assertEquals

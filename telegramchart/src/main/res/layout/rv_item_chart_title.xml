@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <au.sjowl.lib.view.telegramchart.Checkbox
+    <au.sjowl.lib.view.charts.telegram.Checkbox
         android:id="@+id/checkbox"
         android:layout_width="20dp"
         android:layout_height="20dp"

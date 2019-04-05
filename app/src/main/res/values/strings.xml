@@ -1,5 +1,3 @@
 <resources>
     <string name="app_name">Telegram Chart</string>
-    <string name="statistics_title">Statistics</string>
-    <string name="switch_theme">Switch theme</string>
 </resources>
