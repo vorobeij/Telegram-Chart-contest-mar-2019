@@ -20,7 +20,7 @@ class ChartOverviewView : BaseSurfaceView, ThemedView {
             field = value
             value.columns.values.forEach { chartColumn ->
                 chartColumn.calculateBorders()
-                value.columns.values.forEach { charts.add(OverviewChart(it, layoutHelper, paints, value)) }
+                charts.add(OverviewChart(chartColumn, layoutHelper, paints, value))
                 setChartsRange()
             }
         }
